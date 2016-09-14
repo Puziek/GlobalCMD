@@ -6,6 +6,7 @@
 #include <QAbstractListModel>
 #include <QDir>
 #include <QDebug>
+#include <QFileIconProvider>
 
 class FileListModel : public QAbstractListModel
 {
@@ -30,12 +31,13 @@ public:
     QStringList getDriversList();
 
 
-    QString currDirectory;
+    QDir currDirectory;
 
 signals:
+    void directoryChanged(const QString& path);
 
 public slots:
-    void onChangeDirectoryReq(const QModelIndex& index);
+    void changeDirectoryReq(const QModelIndex& index);
 
 private:
     QFileInfoList fileList;

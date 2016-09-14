@@ -19,7 +19,6 @@ SOURCES += main.cpp\
 
 HEADERS  += globalcmd.h \
     filelistmodel.h \
-    drivescombobox.h \
     drivescombobox.h
 
 FORMS    += globalcmd.ui

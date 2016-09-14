@@ -18,25 +18,19 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="l_lFolderPath">
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Path</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="DrivesComboBox" name="cb_lDisks"/>
+         <widget class="DrivesComboBox" name="cb_lDisks">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QLabel" name="l_lDiskSpace_2">
+         <widget class="QLabel" name="l_lDiskSpace">
           <property name="minimumSize">
            <size>
             <width>220</width>
@@ -51,6 +45,24 @@
        </layout>
       </item>
       <item>
+       <widget class="QLabel" name="l_lFolderPath">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>6</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Path</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QTableView" name="tv_lFileList">
         <property name="minimumSize">
          <size>
@@ -62,6 +74,9 @@
          <font>
           <pointsize>6</pointsize>
          </font>
+        </property>
+        <property name="showGrid">
+         <bool>false</bool>
         </property>
         <attribute name="verticalHeaderDefaultSectionSize">
          <number>15</number>
@@ -94,7 +109,14 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QComboBox" name="cb_rDisks"/>
+         <widget class="QComboBox" name="cb_rDisks">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="l_rDiskSpace">

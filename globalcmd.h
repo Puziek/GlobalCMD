@@ -3,6 +3,7 @@
 
 #include "filelistmodel.h"
 #include <QMainWindow>
+#include <QStorageInfo>
 
 namespace Ui {
 class GlobalCMD;
@@ -17,7 +18,8 @@ public:
     ~GlobalCMD();
 
 public slots:
-    void onDiskChange(int index);
+    void changeDriveReq(int index = 0);
+    void onDirectoryChanged(const QString& path);
 
 private:
     Ui::GlobalCMD* ui;
