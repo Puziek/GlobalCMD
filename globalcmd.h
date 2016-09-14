@@ -18,12 +18,9 @@ public:
     ~GlobalCMD();
 
 public slots:
-    void changeDriveReq(int index = 0);
-    void onDirectoryChanged(const QString& path);
 
 private:
     Ui::GlobalCMD* ui;
-    FileListModel* fileListModel;
 };
 
 #endif // GLOBALCMD_H

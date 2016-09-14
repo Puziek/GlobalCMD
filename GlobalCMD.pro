@@ -15,10 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         globalcmd.cpp \
     filelistmodel.cpp \
-    drivescombobox.cpp
+    drivescombobox.cpp \
+    filelistpanel.cpp
 
 HEADERS  += globalcmd.h \
     filelistmodel.h \
-    drivescombobox.h
+    drivescombobox.h \
+    filelistpanel.h
 
-FORMS    += globalcmd.ui
+FORMS    += globalcmd.ui \
+    filelistpanel.ui
