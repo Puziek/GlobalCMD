@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
-    <height>581</height>
+    <width>833</width>
+    <height>457</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,19 +15,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>26</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -46,7 +33,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QComboBox" name="cb_lDisks"/>
+         <widget class="DrivesComboBox" name="cb_lDisks"/>
         </item>
         <item>
          <widget class="QLabel" name="l_lDiskSpace_2">
@@ -64,29 +51,30 @@
        </layout>
       </item>
       <item>
-       <widget class="QListView" name="listView">
+       <widget class="QTableView" name="tv_lFileList">
         <property name="minimumSize">
          <size>
-          <width>300</width>
+          <width>400</width>
           <height>0</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>6</pointsize>
+         </font>
+        </property>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>15</number>
+        </attribute>
+        <attribute name="verticalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>15</number>
+        </attribute>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>26</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
     </item>
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -124,29 +112,16 @@
        </layout>
       </item>
       <item>
-       <widget class="QListView" name="listView_2">
+       <widget class="QListView" name="lv_rFileList">
         <property name="minimumSize">
          <size>
-          <width>300</width>
+          <width>400</width>
           <height>0</height>
          </size>
         </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <spacer name="horizontalSpacer_3">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>26</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
     </item>
    </layout>
   </widget>
@@ -155,7 +130,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>749</width>
+     <width>833</width>
      <height>25</height>
     </rect>
    </property>
@@ -171,6 +146,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DrivesComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">drivescombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

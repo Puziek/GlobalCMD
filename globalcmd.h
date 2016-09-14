@@ -1,6 +1,7 @@
 #ifndef GLOBALCMD_H
 #define GLOBALCMD_H
 
+#include "filelistmodel.h"
 #include <QMainWindow>
 
 namespace Ui {
@@ -15,8 +16,12 @@ public:
     explicit GlobalCMD(QWidget *parent = 0);
     ~GlobalCMD();
 
+public slots:
+    void onDiskChange(int index);
+
 private:
-    Ui::GlobalCMD *ui;
+    Ui::GlobalCMD* ui;
+    FileListModel* fileListModel;
 };
 
 #endif // GLOBALCMD_H
