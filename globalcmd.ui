@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="FileListPanel" name="w_rPanel" native="true">
+      <widget class="FileListPanel" name="w_lPanel" native="true">
        <property name="minimumSize">
         <size>
          <width>420</width>
@@ -28,7 +28,7 @@
         </size>
        </property>
       </widget>
-      <widget class="FileListPanel" name="w_lPanel" native="true">
+      <widget class="FileListPanel" name="w_rPanel" native="true">
        <property name="minimumSize">
         <size>
          <width>420</width>

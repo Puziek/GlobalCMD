@@ -18,7 +18,11 @@ FileListPanel::FileListPanel(QWidget *parent) :
 
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
-    connect(ui->tv_fileList, &QTableView::activated, fileListModel, &FileListModel::changeDirectoryReq);
+    connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), fileListModel, SLOT(changeDirectoryReq(QModelIndex)));
+    connect(ui->tv_fileList, &QTableView::clicked, this, [this] {
+        emit focusChanged();
+    });
+
     connect(ui->cb_disks, SIGNAL(activated(int)), this, SLOT(changeDriveReq(int)));
     connect(ui->cb_disks, &DrivesComboBox::clicked, this, [this] {
         ui->cb_disks->clear();
@@ -33,6 +37,20 @@ FileListPanel::FileListPanel(QWidget *parent) :
 FileListPanel::~FileListPanel()
 {
     delete ui;
+}
+
+void FileListPanel::copyFile()
+{
+    QModelIndexList selection = ui->tv_fileList->selectionModel()->selectedRows();
+    QModelIndex index = *(selection.begin());
+    QString srcDir = fileListModel->getFileDir(index);
+    QString destDir = (buddyPanel->fileListModel->currDirectory.absoluteFilePath(fileListModel->getFileName(index)));
+    QFile::copy(srcDir, destDir);
+}
+
+void FileListPanel::setBuddyPanel(FileListPanel *buddy)
+{
+    buddyPanel = std::move(buddy);
 }
 
 void FileListPanel::changeDriveReq(int index)

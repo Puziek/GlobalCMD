@@ -18,10 +18,14 @@ public:
     explicit FileListPanel(QWidget *parent = 0);
     ~FileListPanel();
 
+    void copyFile();
+    void setBuddyPanel(FileListPanel* buddy);
+
     QDir buddyPath;
 
 signals:
     void directoryChanged(const QString& path);
+    void focusChanged();
 
 public slots:
     void changeDriveReq(int index = 0);
@@ -30,6 +34,7 @@ public slots:
 private:
     Ui::FileListPanel *ui;
     FileListModel* fileListModel;
+    FileListPanel* buddyPanel;
 };
 
 #endif // FILELISTPANEL_H

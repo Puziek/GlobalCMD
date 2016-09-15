@@ -20,6 +20,7 @@ public:
 public slots:
 
 private:
+    bool isLeftPanelFocused;
     Ui::GlobalCMD* ui;
 };
 

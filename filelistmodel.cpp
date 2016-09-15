@@ -10,6 +10,11 @@ QString FileListModel::getFileDir(const QModelIndex &index) const
     return fileList[index.row()].absoluteFilePath();
 }
 
+QString FileListModel::getFileName(const QModelIndex &index) const
+{
+    return fileList[index.row()].fileName();
+}
+
 int FileListModel::rowCount(const QModelIndex& /*parent*/) const
 {
     return fileList.size();
