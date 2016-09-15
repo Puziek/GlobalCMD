@@ -12,9 +12,9 @@ FileListPanel::FileListPanel(QWidget *parent) :
     ui->tv_fileList->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
-    ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::Suffix, QHeaderView::ResizeToContents);
-    ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::Size, QHeaderView::Stretch);
+
     ui->cb_disks->addItems(fileListModel->getDriversList());
+    ui->cb_disks->showPopup();
 
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
@@ -49,4 +49,6 @@ void FileListPanel::changeDriveReq(int index)
 void FileListPanel::onDirectoryChanged(const QString &path)
 {
     ui->l_folderPath->setText(path);
+    buddyPath = QDir(path);
+    qDebug() << buddyPath;
 }

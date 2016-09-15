@@ -7,6 +7,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QFileIconProvider>
+#include <QDateTime>
 
 class FileListModel : public QAbstractListModel
 {
@@ -18,6 +19,8 @@ public:
         FileName,
         Suffix,
         Size,
+        Date,
+        Attributes,
         Count
     };
 
@@ -29,6 +32,7 @@ public:
 
     void changeDirectory(const QString& newDir);
     QStringList getDriversList();
+    QString getAttrString(const QFileInfo &file) const;
 
 
     QDir currDirectory;

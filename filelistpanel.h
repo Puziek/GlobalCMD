@@ -18,6 +18,11 @@ public:
     explicit FileListPanel(QWidget *parent = 0);
     ~FileListPanel();
 
+    QDir buddyPath;
+
+signals:
+    void directoryChanged(const QString& path);
+
 public slots:
     void changeDriveReq(int index = 0);
     void onDirectoryChanged(const QString& path);

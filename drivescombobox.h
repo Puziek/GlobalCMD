@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QComboBox>
 #include <QDebug>
+#include <QFileIconProvider>
 
 class DrivesComboBox : public QComboBox
 {
@@ -16,6 +17,9 @@ signals:
     void clicked();
 
 public slots:
+
+private:
+
 };
 
 #endif // DRIVESCOMBOBOX_H

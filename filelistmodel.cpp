@@ -33,32 +33,35 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
         case Qt::DisplayRole:
         {
             switch (index.column()) {
-                case FileName: {
+                case FileName:
                     if (!file.isFile()) {
                         return QString("[" + file.fileName() + "]");
                     }
                     else {
                         return file.completeBaseName();
                     }
-                }
+
                 case Suffix:
-                {
                     if (!file.isFile()) {
                         return "<DIR>";
                     }
                     else {
                         return file.suffix();
                     }
-                }
+
                 case Size:
-                {
                     if (!file.isFile()) {
                         return "\0";
                     }
                     else {
                         return file.size();
                     }
-                }
+
+                case Date:
+                    return file.created().toString(Qt::LocaleDate);
+
+                case Attributes:
+                    return getAttrString(file);
             }
         }
         case Qt::TextAlignmentRole: {
@@ -76,14 +79,7 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
         case Qt::DecorationRole: {
             switch (index.column()) {
                 case FileName:
-                {
-                    if (!file.isFile()) {
-                        return iconProvider.icon(QFileIconProvider::Folder);
-                    }
-                    else {
-                        return iconProvider.icon(QFileIconProvider::File);
-                    }
-                }
+                        return iconProvider.icon(file);
             }
         }
     }
@@ -99,17 +95,23 @@ QVariant FileListModel::headerData(int section, Qt::Orientation orientation, int
 
     if (orientation == Qt::Horizontal) {
         switch (section) {
-        case FileName:
-            return "File name";
+            case FileName:
+                return tr("File name");
 
-        case Suffix:
-            return "Ext";
+            case Suffix:
+                return tr("Ext");
 
-        case Size:
-            return "Size";
+            case Size:
+                return tr("Size");
 
-        default:
-            return QVariant();
+            case Date:
+                return tr("Time");
+
+            case Attributes:
+                return tr("Attr");
+
+            default:
+                return QVariant();
         }
     }
 
@@ -136,6 +138,18 @@ QStringList FileListModel::getDriversList()
     }
 
     return drives;
+}
+
+QString FileListModel::getAttrString(const QFileInfo& file) const
+{
+    QString attrString;
+
+    (file.isReadable()) ? attrString += "r" : attrString += "-";
+    (file.isWritable()) ? attrString += "w" : attrString += "-";
+    (file.isExecutable()) ? attrString += "x" : attrString += "-";
+    (file.isHidden()) ? attrString += "h" : attrString += "-";
+
+    return attrString;
 }
 
 void FileListModel::changeDirectoryReq(const QModelIndex& index)
