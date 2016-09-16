@@ -3,16 +3,44 @@
 FileListModel::FileListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    connect(&fileWatcher, &QFileSystemWatcher::directoryChanged, this, [this](const QString& path) {
+        if (path == QDir::rootPath() &&                               // I hope it's only temporary workaround
+            currDirectory.absolutePath() != QDir::rootPath()) return; // to avoid unstoppable root updates
+        changeDirectory(path);
+    });
 }
 
-QString FileListModel::getFileDir(const QModelIndex &index) const
+QString FileListModel::getFileDir(const QModelIndex& index) const
 {
     return fileList[index.row()].absoluteFilePath();
 }
 
-QString FileListModel::getFileName(const QModelIndex &index) const
+QString FileListModel::getFileName(const QModelIndex& index) const
 {
     return fileList[index.row()].fileName();
+}
+
+void FileListModel::copyFiles(const QModelIndexList &selected, QString destDir)
+{
+    //TODO:: Copy directories
+    for (const QModelIndex& index : selected) {
+        QString destDir_ = destDir + getFileName(index);
+        QString srcDir = getFileDir(index);
+        QFile::copy(srcDir, destDir_);
+    }
+}
+
+void FileListModel::removeFiles(const QModelIndexList &selected)
+{
+    for (const QModelIndex& index : selected) {
+        QString srcDir = getFileDir(index);
+        if (!fileList.at(index.row()).isDir()) {
+            QFile::remove(srcDir);
+        }
+        else {
+            QDir(srcDir).removeRecursively();
+        }
+    }
 }
 
 int FileListModel::rowCount(const QModelIndex& /*parent*/) const
@@ -125,6 +153,10 @@ QVariant FileListModel::headerData(int section, Qt::Orientation orientation, int
 
 void FileListModel::changeDirectory(const QString& newDir)
 {
+    fileWatcher.removePath(currDirectory.absolutePath());
+    fileWatcher.addPath(newDir);
+    qDebug() << fileWatcher.directories();
+
     currDirectory = QDir(newDir);
 
     beginResetModel();

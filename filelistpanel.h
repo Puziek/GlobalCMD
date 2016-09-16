@@ -18,7 +18,8 @@ public:
     explicit FileListPanel(QWidget *parent = 0);
     ~FileListPanel();
 
-    void copyFile();
+    void copyFiles();
+    void removeFiles();
     void setBuddyPanel(FileListPanel* buddy);
 
     QDir buddyPath;

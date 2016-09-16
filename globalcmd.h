@@ -4,6 +4,7 @@
 #include "filelistmodel.h"
 #include <QMainWindow>
 #include <QStorageInfo>
+#include <QKeyEvent>
 
 namespace Ui {
 class GlobalCMD;
@@ -22,6 +23,9 @@ public slots:
 private:
     bool isLeftPanelFocused;
     Ui::GlobalCMD* ui;
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // GLOBALCMD_H

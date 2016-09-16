@@ -19,7 +19,7 @@ FileListPanel::FileListPanel(QWidget *parent) :
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
     connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), fileListModel, SLOT(changeDirectoryReq(QModelIndex)));
-    connect(ui->tv_fileList, &QTableView::clicked, this, [this] {
+    connect(ui->tv_fileList, &QTableView::pressed, this, [this] {
         emit focusChanged();
     });
 
@@ -39,13 +39,17 @@ FileListPanel::~FileListPanel()
     delete ui;
 }
 
-void FileListPanel::copyFile()
+void FileListPanel::copyFiles()
 {
     QModelIndexList selection = ui->tv_fileList->selectionModel()->selectedRows();
-    QModelIndex index = *(selection.begin());
-    QString srcDir = fileListModel->getFileDir(index);
-    QString destDir = (buddyPanel->fileListModel->currDirectory.absoluteFilePath(fileListModel->getFileName(index)));
-    QFile::copy(srcDir, destDir);
+    QString destDir = buddyPanel->fileListModel->currDirectory.absolutePath();
+    fileListModel->copyFiles(selection, destDir);
+}
+
+void FileListPanel::removeFiles()
+{
+    QModelIndexList selection = ui->tv_fileList->selectionModel()->selectedRows();
+    fileListModel->removeFiles(selection);
 }
 
 void FileListPanel::setBuddyPanel(FileListPanel *buddy)
@@ -68,5 +72,4 @@ void FileListPanel::onDirectoryChanged(const QString &path)
 {
     ui->l_folderPath->setText(path);
     buddyPath = QDir(path);
-    qDebug() << buddyPath;
 }

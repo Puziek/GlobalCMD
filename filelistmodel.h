@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QFileIconProvider>
 #include <QDateTime>
+#include <QFileSystemWatcher>
 
 class FileListModel : public QAbstractListModel
 {
@@ -24,8 +25,8 @@ public:
         Count
     };
 
-    QString getFileDir(const QModelIndex& index) const;
-    QString getFileName(const QModelIndex& index) const;
+
+    bool isDir(const QModelIndex& index) const;
     int rowCount(const QModelIndex& parent = {}) const override;
     int columnCount(const QModelIndex& parent = {}) const override;
     QVariant data(const QModelIndex& index, int role) const;
@@ -34,7 +35,11 @@ public:
     void changeDirectory(const QString& newDir);
     QStringList getDriversList();
     QString getAttrString(const QFileInfo &file) const;
+    QString getFileDir(const QModelIndex& index) const;
+    QString getFileName(const QModelIndex& index) const;
 
+    void copyFiles(const QModelIndexList& selected, QString destDir);
+    void removeFiles(const QModelIndexList& selected);
 
     QDir currDirectory;
 
@@ -45,7 +50,9 @@ public slots:
     void changeDirectoryReq(const QModelIndex& index);
 
 private:
+
     QFileInfoList fileList;
+    QFileSystemWatcher fileWatcher;
 
 };
 

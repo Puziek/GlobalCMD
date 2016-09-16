@@ -54,6 +54,7 @@
      <string>File</string>
     </property>
     <addaction name="actionCopy"/>
+    <addaction name="actionRemove"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -69,6 +70,11 @@
   <action name="actionCopy">
    <property name="text">
     <string>Copy</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Remove</string>
    </property>
   </action>
  </widget>

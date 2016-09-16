@@ -10,7 +10,7 @@ void DrivesComboBox::showPopup()
 
     emit clicked();
     for (int item = 0; item < count(); ++item) {
-        setItemIcon(0, iconProvider.icon(QFileIconProvider::Drive));
+        setItemIcon(item, iconProvider.icon(QFileIconProvider::Drive));
     }
     QComboBox::showPopup();
 }
