@@ -37,20 +37,16 @@ public:
     QString getAttrString(const QFileInfo &file) const;
     QString getFileDir(const QModelIndex& index) const;
     QString getFileName(const QModelIndex& index) const;
-
-    void copyFiles(const QModelIndexList& selected, QString destDir);
-    void removeFiles(const QModelIndexList& selected);
-
-    QDir currDirectory;
+    QDir getCurrDirectory();
+    void setCurrDirectory(const QDir& path);
 
 signals:
     void directoryChanged(const QString& path);
 
 public slots:
-    void changeDirectoryReq(const QModelIndex& index);
 
 private:
-
+    QDir currDirectory;
     QFileInfoList fileList;
     QFileSystemWatcher fileWatcher;
 

@@ -2,6 +2,7 @@
 #define GLOBALCMD_H
 
 #include "filelistmodel.h"
+#include "filelistpanel.h"
 #include <QMainWindow>
 #include <QStorageInfo>
 #include <QKeyEvent>
@@ -21,11 +22,11 @@ public:
 public slots:
 
 private:
-    bool isLeftPanelFocused;
+    FileListPanel* focusedPanel;
     Ui::GlobalCMD* ui;
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent* event) override;
 };
 
 #endif // GLOBALCMD_H

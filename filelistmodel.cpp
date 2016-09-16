@@ -10,37 +10,41 @@ FileListModel::FileListModel(QObject *parent)
     });
 }
 
+bool FileListModel::isDir(const QModelIndex &index) const
+{
+    if (index.row() > fileList.size()) {
+        qDebug() << "[DEBUG isDir] index.row() is overflowing fileList";
+        return NULL;
+    }
+    return fileList[index.row()].isDir();
+}
+
 QString FileListModel::getFileDir(const QModelIndex& index) const
 {
+    if (index.row() > fileList.size()) {
+        qDebug() << "[DEBUG getFileDir] index.row() is overflowing fileList";
+        return NULL;
+    }
     return fileList[index.row()].absoluteFilePath();
 }
 
 QString FileListModel::getFileName(const QModelIndex& index) const
 {
+    if (index.row() > fileList.size()) {
+        qDebug() << "[DEBUG getFileName] index.row() is overflowing fileList";
+        return NULL;
+    }
     return fileList[index.row()].fileName();
 }
 
-void FileListModel::copyFiles(const QModelIndexList &selected, QString destDir)
+QDir FileListModel::getCurrDirectory()
 {
-    //TODO:: Copy directories
-    for (const QModelIndex& index : selected) {
-        QString destDir_ = destDir + getFileName(index);
-        QString srcDir = getFileDir(index);
-        QFile::copy(srcDir, destDir_);
-    }
+    return currDirectory;
 }
 
-void FileListModel::removeFiles(const QModelIndexList &selected)
+void FileListModel::setCurrDirectory(const QDir &path)
 {
-    for (const QModelIndex& index : selected) {
-        QString srcDir = getFileDir(index);
-        if (!fileList.at(index.row()).isDir()) {
-            QFile::remove(srcDir);
-        }
-        else {
-            QDir(srcDir).removeRecursively();
-        }
-    }
+    currDirectory = path;
 }
 
 int FileListModel::rowCount(const QModelIndex& /*parent*/) const
@@ -75,20 +79,10 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
                     }
 
                 case Suffix:
-                    if (!file.isFile()) {
-                        return "<DIR>";
-                    }
-                    else {
-                        return file.suffix();
-                    }
+                    return file.isFile() ? file.suffix() : "<DIR>";
 
                 case Size:
-                    if (!file.isFile()) {
-                        return "\0";
-                    }
-                    else {
-                        return file.size();
-                    }
+                    return file.isFile() ? QString::number(file.size()) : "\0";
 
                 case Date:
                     return file.created().toString(Qt::LocaleDate);
@@ -189,7 +183,3 @@ QString FileListModel::getAttrString(const QFileInfo& file) const
     return attrString;
 }
 
-void FileListModel::changeDirectoryReq(const QModelIndex& index)
-{
-    changeDirectory(getFileDir(index));
-}

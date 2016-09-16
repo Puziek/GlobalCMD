@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         globalcmd.cpp \
     filelistmodel.cpp \
     drivescombobox.cpp \
-    filelistpanel.cpp
+    filelistpanel.cpp \
+    gcmdtableview.cpp
 
 HEADERS  += globalcmd.h \
     filelistmodel.h \
     drivescombobox.h \
-    filelistpanel.h
+    filelistpanel.h \
+    gcmdtableview.h
 
 FORMS    += globalcmd.ui \
     filelistpanel.ui

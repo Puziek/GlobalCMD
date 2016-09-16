@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QMainWindow>
 #include <QStorageInfo>
+#include <QKeyEvent>
 
 namespace Ui {
 class FileListPanel;
@@ -20,6 +21,7 @@ public:
 
     void copyFiles();
     void removeFiles();
+    void goDirUp();
     void setBuddyPanel(FileListPanel* buddy);
 
     QDir buddyPath;
@@ -30,7 +32,9 @@ signals:
 
 public slots:
     void changeDriveReq(int index = 0);
-    void onDirectoryChanged(const QString& path);
+    void setDirectoryPath(const QString& path);
+    void setDirectory(const QModelIndex& index);
+
 
 private:
     Ui::FileListPanel *ui;

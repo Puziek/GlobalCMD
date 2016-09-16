@@ -74,7 +74,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QTableView" name="tv_fileList">
+      <widget class="GCMDTableView" name="tv_fileList">
        <property name="minimumSize">
         <size>
          <width>400</width>
@@ -121,6 +121,11 @@
    <class>DrivesComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">drivescombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GCMDTableView</class>
+   <extends>QTableView</extends>
+   <header location="global">gcmdtableview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
