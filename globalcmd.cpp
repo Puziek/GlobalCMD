@@ -50,6 +50,12 @@ void GlobalCMD::keyPressEvent(QKeyEvent *event)
     case Qt::Key_F5:
         focusedPanel->copyFiles();
         return;
+    case Qt::Key_F6:
+        focusedPanel->moveFiles();
+        return;
+    case Qt::Key_F7:
+        focusedPanel->createDirectory();
+        return;
     }
 
     QWidget::keyPressEvent(event);

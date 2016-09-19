@@ -1,6 +1,7 @@
 #ifndef FILELISTMODEL_H
 #define FILELISTMODEL_H
 
+#include "fileoperator.h"
 #include <QObject>
 #include <QFileInfo>
 #include <QAbstractListModel>
@@ -38,6 +39,7 @@ public:
     QString getFileDir(const QModelIndex& index) const;
     QString getFileName(const QModelIndex& index) const;
     QDir getCurrDirectory();
+    QFileInfoList getFileInfoFromSelection(const QModelIndexList& selection);
     void setCurrDirectory(const QDir& path);
 
 signals:

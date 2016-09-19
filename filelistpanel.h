@@ -2,10 +2,13 @@
 #define FILELISTPANEL_H
 
 #include "filelistmodel.h"
+#include "fileoperator.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QStorageInfo>
 #include <QKeyEvent>
+#include <QInputDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class FileListPanel;
@@ -21,6 +24,8 @@ public:
 
     void copyFiles();
     void removeFiles();
+    void moveFiles();
+    void createDirectory();
     void goDirUp();
     void setBuddyPanel(FileListPanel* buddy);
 

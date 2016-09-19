@@ -1,5 +1,6 @@
 #include "filelistpanel.h"
 #include "ui_filelistpanel.h"
+#include <QDebug>
 
 FileListPanel::FileListPanel(QWidget *parent) :
     QWidget(parent),
@@ -42,22 +43,42 @@ FileListPanel::~FileListPanel()
 void FileListPanel::copyFiles()
 {
     QModelIndexList selection = ui->tv_fileList->selectionModel()->selectedRows();
+    QString destDir = buddyPanel->fileListModel->getCurrDirectory().absolutePath();
+    QFileInfoList filesToCopy;
+    bool yesToAll = false;
 
     if (selection.size() == 0) {
         qDebug() << "[DEBUG copyFiles] selected count = 0";
         return;
     }
 
-    //TODO:: Copy directories
-    for (const QModelIndex& index : selection) {
-        QString destDir = buddyPanel->fileListModel->getCurrDirectory().absolutePath();
-        QString srcDir = fileListModel->getFileDir(index);
-        //TODO: Check if there is any way to make it more unified (/ for unix, \ for windows
-        (destDir.endsWith("/")) ? destDir += fileListModel->getFileName(index) : destDir = destDir + "/" + fileListModel->getFileName(index);
-        qDebug() << "SRC: " << srcDir;
-        qDebug() << "DST: " << destDir;
-        QFile::copy(srcDir, destDir);
+    //TODO: Create separate function from this part of code
+    for (const QFileInfo& file : fileListModel->getFileInfoFromSelection(selection)) {
+        if (QFile(destDir + "/" + file.fileName()).exists() && !yesToAll) {
+            int answer = QMessageBox::question(nullptr, tr("Overwrite?"), tr("Do you want to overwrite file: ") + file.fileName(),
+                                               QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll);
+
+            if (answer == QMessageBox::NoToAll) break;
+            switch(answer) {
+            case QMessageBox::Yes:
+                filesToCopy.append(file);
+                break;
+
+            case QMessageBox::YesToAll:
+                yesToAll = true;
+                filesToCopy.append(file);
+                break;
+
+            case QMessageBox::No:
+                break;
+            }
+        }
+        else {
+            filesToCopy.append(file);
+        }
     }
+
+    FileOperator::startCopyThread(filesToCopy, destDir);
 }
 
 void FileListPanel::removeFiles()
@@ -69,15 +90,56 @@ void FileListPanel::removeFiles()
         return;
     }
 
-    for (const QModelIndex& index : selection) {
-        QString srcDir = fileListModel->getFileDir(index);
-        if (!fileListModel->isDir(index)) {
-            QFile::remove(srcDir);
+    FileOperator::startRemoveThread(fileListModel->getFileInfoFromSelection(selection));
+}
+
+void FileListPanel::moveFiles()
+{
+    QModelIndexList selection = ui->tv_fileList->selectionModel()->selectedRows();
+    QString destDir = buddyPanel->fileListModel->getCurrDirectory().absolutePath();
+    QFileInfoList filesToMove;
+    bool yesToAll = false;
+
+    if (selection.size() == 0) {
+        qDebug() << "[DEBUG moveFiles] selected count = 0";
+        return;
+    }
+
+    //TODO: Create separate function from this part of code
+    for (const QFileInfo& file : fileListModel->getFileInfoFromSelection(selection)) {
+        if (QFile(destDir + "/" + file.fileName()).exists() && !yesToAll) {
+            int answer = QMessageBox::question(nullptr, tr("Overwrite?"), tr("Do you want to overwrite file: ") + file.fileName(),
+                                               QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No | QMessageBox::NoToAll);
+
+            if (answer == QMessageBox::NoToAll) break;
+            switch(answer) {
+            case QMessageBox::Yes:
+                filesToMove.append(file);
+                break;
+
+            case QMessageBox::YesToAll:
+                yesToAll = true;
+                filesToMove.append(file);
+                break;
+
+            case QMessageBox::No:
+                break;
+            }
         }
         else {
-            QDir(srcDir).removeRecursively();
+            filesToMove.append(file);
         }
     }
+
+    FileOperator::startMoveThread(filesToMove, destDir);
+}
+
+void FileListPanel::createDirectory()
+{
+    QString dirName = QInputDialog::getText(this, tr("Directory name"),
+                                            tr("Directory name:"), QLineEdit::Normal,
+                                            "New folder");
+    FileOperator::createDirectory(fileListModel->getCurrDirectory(), dirName);
 }
 
 void FileListPanel::goDirUp()

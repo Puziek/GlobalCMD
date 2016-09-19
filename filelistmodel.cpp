@@ -16,7 +16,7 @@ bool FileListModel::isDir(const QModelIndex &index) const
         qDebug() << "[DEBUG isDir] index.row() is overflowing fileList";
         return NULL;
     }
-    return fileList[index.row()].isDir();
+    return fileList.at(index.row()).isDir();
 }
 
 QString FileListModel::getFileDir(const QModelIndex& index) const
@@ -25,7 +25,7 @@ QString FileListModel::getFileDir(const QModelIndex& index) const
         qDebug() << "[DEBUG getFileDir] index.row() is overflowing fileList";
         return NULL;
     }
-    return fileList[index.row()].absoluteFilePath();
+    return fileList.at(index.row()).absoluteFilePath();
 }
 
 QString FileListModel::getFileName(const QModelIndex& index) const
@@ -34,12 +34,23 @@ QString FileListModel::getFileName(const QModelIndex& index) const
         qDebug() << "[DEBUG getFileName] index.row() is overflowing fileList";
         return NULL;
     }
-    return fileList[index.row()].fileName();
+    return fileList.at(index.row()).fileName();
 }
 
 QDir FileListModel::getCurrDirectory()
 {
     return currDirectory;
+}
+
+QFileInfoList FileListModel::getFileInfoFromSelection(const QModelIndexList &selection)
+{
+    QFileInfoList filesFromSelection;
+
+    for (const QModelIndex& index : selection) {
+        filesFromSelection.append(fileList.at(index.row()));
+    }
+
+    return filesFromSelection;
 }
 
 void FileListModel::setCurrDirectory(const QDir &path)
@@ -64,7 +75,7 @@ QVariant FileListModel::data(const QModelIndex& index, int role) const
     }
 
     QFileIconProvider iconProvider;
-    const QFileInfo& file = fileList[index.row()];
+    const QFileInfo& file = fileList.at(index.row());
 
     switch (role) {
         case Qt::DisplayRole:
