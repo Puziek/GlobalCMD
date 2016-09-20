@@ -2,26 +2,27 @@
 #include "ui_filelistpanel.h"
 #include <QDebug>
 
-FileListPanel::FileListPanel(QWidget *parent) :
+FileListPanel::FileListPanel(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::FileListPanel)
 {
     ui->setupUi(this);
 
     fileListModel = new FileListModel();
+
     ui->tv_fileList->setModel(fileListModel);
     ui->tv_fileList->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
 
     ui->cb_disks->addItems(fileListModel->getDriversList());
-    ui->cb_disks->showPopup();
+    //ui->cb_disks->showPopup();
 
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
     connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), this, SLOT(setDirectory(QModelIndex)));
     connect(ui->tv_fileList, &QTableView::pressed, this, [this] {
-        emit focusChanged();
+        emit focusChanged(this);
     });
 
     connect(ui->cb_disks, SIGNAL(activated(int)), this, SLOT(changeDriveReq(int)));
@@ -152,11 +153,22 @@ void FileListPanel::goDirUp()
 
 void FileListPanel::setBuddyPanel(FileListPanel* buddy)
 {
+    qDebug() << "[DEBUG] Set buddy panel";
+    disconnect(this, &FileListPanel::directoryChanged, buddyPanel, nullptr);
+    disconnect(ui->tv_fileList, &GCMDTableView::tabPressed, buddyPanel, nullptr);
+
     buddyPanel = buddy;
+
+    connect(this, &FileListPanel::directoryChanged, buddyPanel, &FileListPanel::setDirectoryPath);
     connect(ui->tv_fileList, &GCMDTableView::tabPressed, buddyPanel, [this] {
         buddyPanel->ui->tv_fileList->setFocus();
-        emit buddyPanel->focusChanged();
+        emit buddyPanel->focusChanged(buddyPanel);
     });
+}
+
+bool FileListPanel::checkMembership()
+{
+    return isInLeftTabs;
 }
 
 void FileListPanel::changeDriveReq(int /*index*/)
@@ -170,6 +182,7 @@ void FileListPanel::changeDriveReq(int /*index*/)
 
 void FileListPanel::setDirectoryPath(const QString &path)
 {
+    qDebug() << "[DEBUG] Set directory path";
     ui->l_folderPath->setText(path);
     buddyPath = QDir(path);
 }

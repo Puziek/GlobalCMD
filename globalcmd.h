@@ -6,6 +6,8 @@
 #include <QMainWindow>
 #include <QStorageInfo>
 #include <QKeyEvent>
+#include <QVector>
+#include <QShortcut>
 
 namespace Ui {
 class GlobalCMD;
@@ -20,8 +22,11 @@ public:
     ~GlobalCMD();
 
 public slots:
+    void createNewTab();
 
 private:
+    void updateCurrentTabs(QWidget *firstPanel, QWidget *secondPanel, bool isFirstFocused);
+
     FileListPanel* focusedPanel;
     Ui::GlobalCMD* ui;
 

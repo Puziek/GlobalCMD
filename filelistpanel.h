@@ -19,7 +19,7 @@ class FileListPanel : public QWidget
     Q_OBJECT
 
 public:
-    explicit FileListPanel(QWidget *parent = 0);
+    explicit FileListPanel(QWidget* parent = 0);
     ~FileListPanel();
 
     void copyFiles();
@@ -28,12 +28,13 @@ public:
     void createDirectory();
     void goDirUp();
     void setBuddyPanel(FileListPanel* buddy);
+    bool checkMembership();
 
     QDir buddyPath;
 
 signals:
     void directoryChanged(const QString& path);
-    void focusChanged();
+    void focusChanged(FileListPanel*);
 
 public slots:
     void changeDriveReq(int index = 0);
@@ -45,6 +46,8 @@ private:
     Ui::FileListPanel *ui;
     FileListModel* fileListModel;
     FileListPanel* buddyPanel;
+
+    bool isInLeftTabs;
 };
 
 #endif // FILELISTPANEL_H
