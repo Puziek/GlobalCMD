@@ -34,7 +34,6 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     void changeDirectory(const QString& newDir);
-    QStringList getDriversList();
     QString getAttrString(const QFileInfo &file) const;
     QString getFileDir(const QModelIndex& index) const;
     QString getFileName(const QModelIndex& index) const;

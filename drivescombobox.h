@@ -2,6 +2,7 @@
 #define DRIVESCOMBOBOX_H
 
 #include <QObject>
+#include <QDir>
 #include <QComboBox>
 #include <QDebug>
 #include <QFileIconProvider>
@@ -13,12 +14,12 @@ public:
     explicit DrivesComboBox(QWidget *parent = 0);
     void showPopup() override;
 
-signals:
-    void clicked();
+    void updateDrivesList();
 
 public slots:
 
 private:
+    QStringList listOfDrives;
 
 };
 

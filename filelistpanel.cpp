@@ -15,8 +15,7 @@ FileListPanel::FileListPanel(QWidget* parent) :
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
 
-    ui->cb_disks->addItems(fileListModel->getDriversList());
-    //ui->cb_disks->showPopup();
+    ui->cb_disks->updateDrivesList();
 
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
@@ -26,10 +25,6 @@ FileListPanel::FileListPanel(QWidget* parent) :
     });
 
     connect(ui->cb_disks, SIGNAL(activated(int)), this, SLOT(changeDriveReq(int)));
-    connect(ui->cb_disks, &DrivesComboBox::clicked, this, [this] {
-        ui->cb_disks->clear();
-        ui->cb_disks->addItems(fileListModel->getDriversList());
-    });
 
     connect(fileListModel, &FileListModel::directoryChanged, this, &FileListPanel::setDirectoryPath);
 
@@ -153,7 +148,6 @@ void FileListPanel::goDirUp()
 
 void FileListPanel::setBuddyPanel(FileListPanel* buddy)
 {
-    qDebug() << "[DEBUG] Set buddy panel";
     disconnect(this, &FileListPanel::directoryChanged, buddyPanel, nullptr);
     disconnect(ui->tv_fileList, &GCMDTableView::tabPressed, buddyPanel, nullptr);
 

@@ -160,7 +160,6 @@ void FileListModel::changeDirectory(const QString& newDir)
 {
     fileWatcher.removePath(currDirectory.absolutePath());
     fileWatcher.addPath(newDir);
-    qDebug() << fileWatcher.directories();
 
     currDirectory = QDir(newDir);
 
@@ -169,17 +168,6 @@ void FileListModel::changeDirectory(const QString& newDir)
     endResetModel();
 
     emit directoryChanged(currDirectory.absolutePath());
-}
-
-QStringList FileListModel::getDriversList()
-{
-    QStringList drives;
-
-    for (const QFileInfo& driver : QDir::drives()) {
-        drives.append(driver.filePath());
-    }
-
-    return drives;
 }
 
 QString FileListModel::getAttrString(const QFileInfo& file) const
