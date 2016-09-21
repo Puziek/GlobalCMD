@@ -19,8 +19,6 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
 
-    ui->cb_disks->updateDrivesList();
-
     ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
 
     connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), this, SLOT(setDirectory(QModelIndex)));
@@ -31,8 +29,12 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     connect(ui->cb_disks, SIGNAL(activated(int)), this, SLOT(changeDriveReq(int)));
 
     connect(fileListModel, &FileListModel::directoryChanged, this, &FileListPanel::setDirectoryPath);
+    connect(fileListModel, &FileListModel::diskSpaceUpdated, this, [this] (const QString& diskSpace) {
+       ui->l_diskSpace->setText(diskSpace);
+    });
 
     fileListModel->changeDirectory(startingPath);
+    ui->cb_disks->updateDrivesList(QDir(startingPath));
 }
 
 FileListPanel::~FileListPanel()
@@ -178,10 +180,6 @@ QString FileListPanel::getCurrDir()
 void FileListPanel::changeDriveReq(int /*index*/)
 {
     fileListModel->changeDirectory(ui->cb_disks->currentText());
-
-    QStorageInfo storage(ui->cb_disks->currentText());
-    ui->l_diskSpace->setText(QString::number(storage.bytesAvailable() / 1000 / 1000) + " MB / "
-                             + QString::number(storage.bytesTotal() / 1000 / 1000) + " MB");
 }
 
 void FileListPanel::setDirectoryPath(const QString &path)

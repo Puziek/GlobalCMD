@@ -167,7 +167,11 @@ void FileListModel::changeDirectory(const QString& newDir)
     fileList = currDirectory.entryInfoList(QDir::AllEntries | QDir::NoDot, QDir::DirsFirst);
     endResetModel();
 
+    QStorageInfo storage(newDir);
+
     emit directoryChanged(currDirectory.absolutePath());
+    emit diskSpaceUpdated(QString(QString::number(storage.bytesAvailable() / 1000 / 1000) + " MB / "
+                          + QString::number(storage.bytesTotal() / 1000 / 1000) + " MB"));
 }
 
 QString FileListModel::getAttrString(const QFileInfo& file) const

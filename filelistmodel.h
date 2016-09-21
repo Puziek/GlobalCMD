@@ -43,6 +43,7 @@ public:
 
 signals:
     void directoryChanged(const QString& path);
+    void diskSpaceUpdated(const QString& string);
 
 public slots:
 

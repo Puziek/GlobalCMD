@@ -14,7 +14,7 @@ public:
     explicit DrivesComboBox(QWidget *parent = 0);
     void showPopup() override;
 
-    void updateDrivesList();
+    void updateDrivesList(QDir currDir = {});
 
 public slots:
 

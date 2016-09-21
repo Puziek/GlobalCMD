@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QVector>
 #include <QShortcut>
+#include <QSettings>
 
 namespace Ui {
 class GlobalCMD;
@@ -31,6 +32,7 @@ private:
 
     FileListPanel* focusedPanel;
     Ui::GlobalCMD* ui;
+    QSettings settings;
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;

@@ -63,6 +63,22 @@ GlobalCMD::GlobalCMD(QWidget *parent) :
         focusedPanel->removeFiles();
     });
 
+    connect(ui->pb_copy, &QPushButton::released, this, [this] {
+        focusedPanel->copyFiles();
+    });
+
+    connect(ui->pb_move, &QPushButton::released, this, [this] {
+        focusedPanel->moveFiles();
+    });
+
+    connect(ui->pb_makeDir, &QPushButton::released, this, [this] {
+        focusedPanel->createDirectory();
+    });
+
+    connect(ui->pb_remove, &QPushButton::released, this, [this] {
+        focusedPanel->removeFiles();
+    });
+
     connect(addTabShortcut, QShortcut::activated, this, GlobalCMD::createNewTab);
     connect(removeTabShortcut, QShortcut::activated, this, GlobalCMD::removeCurrentTab);
 }
@@ -79,6 +95,7 @@ void GlobalCMD::createNewTab()
 
     if (focusedPanel == panel) {
         ui->tw_leftPanel->addTab(new FileListPanel(panel->getCurrDir()), panel->getCurrDirName());
+        ui->tw_leftPanel->widget(ui->tw_leftPanel->currentIndex())->setAttribute(Qt::WA_DeleteOnClose);
         ui->tw_leftPanel->setCurrentIndex(ui->tw_leftPanel->count() - 1);
 
         panel = dynamic_cast<FileListPanel*> (ui->tw_leftPanel->
@@ -93,6 +110,7 @@ void GlobalCMD::createNewTab()
         panel = dynamic_cast<FileListPanel*> (ui->tw_rightPanel->
                                               widget(ui->tw_rightPanel->currentIndex()));
         ui->tw_rightPanel->addTab(new FileListPanel(panel->getCurrDir()), panel->getCurrDirName());
+        ui->tw_rightPanel->widget(ui->tw_rightPanel->currentIndex())->setAttribute(Qt::WA_DeleteOnClose);
         ui->tw_rightPanel->setCurrentIndex(ui->tw_rightPanel->count() - 1);
 
         panel = dynamic_cast<FileListPanel*> (ui->tw_rightPanel->
@@ -185,6 +203,9 @@ void GlobalCMD::keyPressEvent(QKeyEvent *event)
     case Qt::Key_Delete:
         focusedPanel->removeFiles();
         return;
+
+    case Qt::Key_F8:
+        focusedPanel->removeFiles();
 
     case Qt::Key_F5:
         focusedPanel->copyFiles();
