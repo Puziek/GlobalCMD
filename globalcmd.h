@@ -23,9 +23,11 @@ public:
 
 public slots:
     void createNewTab();
+    void removeCurrentTab();
 
 private:
     void updateCurrentTabs(QWidget *firstPanel, QWidget *secondPanel, bool isFirstFocused);
+    void connectPanelSignals(FileListPanel* panel, bool isFirstFocused);
 
     FileListPanel* focusedPanel;
     Ui::GlobalCMD* ui;

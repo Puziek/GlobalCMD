@@ -2,11 +2,15 @@
 #include "ui_filelistpanel.h"
 #include <QDebug>
 
-FileListPanel::FileListPanel(QWidget* parent) :
+FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     QWidget(parent),
     ui(new Ui::FileListPanel)
 {
     ui->setupUi(this);
+
+    if (startingPath == NULL) {
+        startingPath = QDir::rootPath();
+    }
 
     fileListModel = new FileListModel();
 
@@ -28,7 +32,7 @@ FileListPanel::FileListPanel(QWidget* parent) :
 
     connect(fileListModel, &FileListModel::directoryChanged, this, &FileListPanel::setDirectoryPath);
 
-    changeDriveReq();
+    fileListModel->changeDirectory(startingPath);
 }
 
 FileListPanel::~FileListPanel()
@@ -142,27 +146,33 @@ void FileListPanel::goDirUp()
 {
     QDir tempDir = fileListModel->getCurrDirectory();
     tempDir.cdUp();
-    qDebug() << tempDir.absolutePath();
     fileListModel->changeDirectory(tempDir.absolutePath());
 }
 
 void FileListPanel::setBuddyPanel(FileListPanel* buddy)
 {
-    disconnect(this, &FileListPanel::directoryChanged, buddyPanel, nullptr);
     disconnect(ui->tv_fileList, &GCMDTableView::tabPressed, buddyPanel, nullptr);
 
     buddyPanel = buddy;
 
-    connect(this, &FileListPanel::directoryChanged, buddyPanel, &FileListPanel::setDirectoryPath);
     connect(ui->tv_fileList, &GCMDTableView::tabPressed, buddyPanel, [this] {
         buddyPanel->ui->tv_fileList->setFocus();
         emit buddyPanel->focusChanged(buddyPanel);
     });
 }
 
-bool FileListPanel::checkMembership()
+QString FileListPanel::getCurrDirName()
 {
-    return isInLeftTabs;
+    if (fileListModel->getCurrDirectory().isRoot()) {
+        return fileListModel->getCurrDirectory().absolutePath();
+    }
+
+    return fileListModel->getCurrDirectory().dirName();
+}
+
+QString FileListPanel::getCurrDir()
+{
+    return fileListModel->getCurrDirectory().absolutePath();
 }
 
 void FileListPanel::changeDriveReq(int /*index*/)
@@ -176,7 +186,9 @@ void FileListPanel::changeDriveReq(int /*index*/)
 
 void FileListPanel::setDirectoryPath(const QString &path)
 {
-    qDebug() << "[DEBUG] Set directory path";
+    QDir dirPath = QDir(path);
+    (dirPath.isRoot()) ? emit dirNameChanged(dirPath.absolutePath()) :
+                         emit dirNameChanged(dirPath.dirName());
     ui->l_folderPath->setText(path);
     buddyPath = QDir(path);
 }
