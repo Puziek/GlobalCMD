@@ -19,6 +19,7 @@ public:
     void setMainFont(const QFont& mainFont);
     void setListFont(const QFont& listFont);
 
+
 private:
     Ui::FontsPage *ui;
 };

@@ -33,7 +33,6 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
     configChanged = false;
     ui->pb_apply->setEnabled(configChanged);
-
     loadSettings();
 
     //TODO: It shouldn't be here
