@@ -7,9 +7,6 @@ GlobalCMD::GlobalCMD(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QShortcut* addTabShortcut = new QShortcut(QKeySequence(tr("Ctrl+T")), this);
-    QShortcut* removeTabShortcut = new QShortcut(QKeySequence(tr("Ctrl+W")), this);
-
     ui->tw_leftPanel->removeTab(1);
     ui->tw_rightPanel->removeTab(1);
     ui->tw_leftPanel->setTabText(0, dynamic_cast<FileListPanel*> (ui->tw_leftPanel->widget(0))->getCurrDirName());
@@ -63,6 +60,13 @@ GlobalCMD::GlobalCMD(QWidget *parent) :
         focusedPanel->removeFiles();
     });
 
+    connect(ui->actionSettings, &QAction::triggered, this, [this] {
+        settingsWindow = new SettingsWindow();
+        settingsWindow->setAttribute(Qt::WA_DeleteOnClose);
+        connect(settingsWindow, &SettingsWindow::settingsChanged, this, &GlobalCMD::updateConfig);
+        settingsWindow->exec();
+    });
+
     connect(ui->pb_copy, &QPushButton::released, this, [this] {
         focusedPanel->copyFiles();
     });
@@ -79,8 +83,7 @@ GlobalCMD::GlobalCMD(QWidget *parent) :
         focusedPanel->removeFiles();
     });
 
-    connect(addTabShortcut, QShortcut::activated, this, GlobalCMD::createNewTab);
-    connect(removeTabShortcut, QShortcut::activated, this, GlobalCMD::removeCurrentTab);
+    updateConfig();
 }
 
 GlobalCMD::~GlobalCMD()
@@ -159,6 +162,31 @@ void GlobalCMD::removeCurrentTab()
     }
 }
 
+void GlobalCMD::updateConfig()
+{
+    FileListPanel* panel;
+    for (int widget = 0; widget < ui->tw_leftPanel->count(); ++widget) {
+        panel = dynamic_cast<FileListPanel*> (ui->tw_leftPanel->widget(widget));
+        panel->updateFont(qvariant_cast<QFont>(SettingsManager::getSetting("Fonts", "List font", QFont())));
+        panel->setHiddenColumns(SettingsManager::getSetting("Columns", "Hidden columns",
+                                                            QBitArray(FileListModel::Count)).toBitArray());
+    }
+
+    for (int widget = 0; widget < ui->tw_rightPanel->count(); ++widget) {
+        panel = dynamic_cast<FileListPanel*> (ui->tw_rightPanel->widget(widget));
+        panel->updateFont(qvariant_cast<QFont>(SettingsManager::getSetting("Fonts", "List font", QFont())));
+        panel->setHiddenColumns(SettingsManager::getSetting("Columns", "Hidden columns",
+                                                            QBitArray(FileListModel::Count)).toBitArray());
+    }
+
+    setFont(qvariant_cast<QFont>
+           (SettingsManager::getSetting("Fonts", "Main font", QFont())));
+    ui->tw_leftPanel->setFont(qvariant_cast<QFont>
+                             (SettingsManager::getSetting("Fonts", "Main font", QFont())));
+    ui->tw_rightPanel->setFont(qvariant_cast<QFont>
+                              (SettingsManager::getSetting("Fonts", "Main font", QFont())));
+}
+
 void GlobalCMD::updateCurrentTabs(QWidget* firstPanel, QWidget* secondPanel, bool isFirstFocused)
 {
     FileListPanel* firstListPanel = dynamic_cast<FileListPanel*> (firstPanel);
@@ -217,6 +245,18 @@ void GlobalCMD::keyPressEvent(QKeyEvent *event)
 
     case Qt::Key_F7:
         focusedPanel->createDirectory();
+        return;
+
+    case Qt::Key_T:
+        if(event->modifiers() & Qt::ControlModifier) {
+            createNewTab();
+        };
+        return;
+
+    case Qt::Key_W:
+        if(event->modifiers() & Qt::ControlModifier) {
+            removeCurrentTab();
+        };
         return;
     }
 

@@ -20,14 +20,25 @@ SOURCES += main.cpp\
     drivescombobox.cpp \
     filelistpanel.cpp \
     gcmdtableview.cpp \
-    fileoperator.cpp
+    fileoperator.cpp \
+    settingsmanager.cpp \
+    settingswindow.cpp \
+    Pages/fontspage.cpp \
+    Pages/columnspage.cpp
 
 HEADERS  += globalcmd.h \
     filelistmodel.h \
     drivescombobox.h \
     filelistpanel.h \
     gcmdtableview.h \
-    fileoperator.h
+    fileoperator.h \
+    settingsmanager.h \
+    settingswindow.h \
+    Pages/fontspage.h \
+    Pages/columnspage.h
 
 FORMS    += globalcmd.ui \
-    filelistpanel.ui
+    filelistpanel.ui \
+    settingswindow.ui \
+    Pages/fontspage.ui \
+    Pages/columnspage.ui

@@ -3,12 +3,11 @@
 
 #include "filelistmodel.h"
 #include "filelistpanel.h"
+#include "settingswindow.h"
 #include <QMainWindow>
 #include <QStorageInfo>
 #include <QKeyEvent>
 #include <QVector>
-#include <QShortcut>
-#include <QSettings>
 
 namespace Ui {
 class GlobalCMD;
@@ -25,14 +24,15 @@ public:
 public slots:
     void createNewTab();
     void removeCurrentTab();
+    void updateConfig();
 
 private:
     void updateCurrentTabs(QWidget *firstPanel, QWidget *secondPanel, bool isFirstFocused);
     void connectPanelSignals(FileListPanel* panel, bool isFirstFocused);
 
     FileListPanel* focusedPanel;
+    SettingsWindow* settingsWindow;
     Ui::GlobalCMD* ui;
-    QSettings settings;
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
