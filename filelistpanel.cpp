@@ -7,6 +7,7 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     ui(new Ui::FileListPanel)
 {
     ui->setupUi(this);
+    ui->tv_fileList->setFont(qvariant_cast<QFont> (SettingsManager::getSetting("Fonts", "List font", QFont())));
 
     if (startingPath == NULL) {
         startingPath = QDir::rootPath();
@@ -161,6 +162,18 @@ void FileListPanel::setBuddyPanel(FileListPanel* buddy)
         buddyPanel->ui->tv_fileList->setFocus();
         emit buddyPanel->focusChanged(buddyPanel);
     });
+}
+
+void FileListPanel::updateFont(const QFont &font)
+{
+    ui->tv_fileList->setFont(font);
+}
+
+void FileListPanel::setHiddenColumns(const QBitArray &hiddenColumns)
+{
+    for (int column = 0; column < FileListModel::Count; ++column) {
+        ui->tv_fileList->setColumnHidden(column, hiddenColumns.at(column));
+    }
 }
 
 QString FileListPanel::getCurrDirName()

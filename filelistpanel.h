@@ -3,6 +3,7 @@
 
 #include "filelistmodel.h"
 #include "fileoperator.h"
+#include "settingsmanager.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QStorageInfo>
@@ -28,6 +29,8 @@ public:
     void createDirectory();
     void goDirUp();
     void setBuddyPanel(FileListPanel* buddy);
+    void updateFont(const QFont& font);
+    void setHiddenColumns(const QBitArray& hiddenColumns);
     QString getCurrDirName();
     QString getCurrDir();
 
