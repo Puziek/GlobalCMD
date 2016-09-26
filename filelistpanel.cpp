@@ -20,7 +20,10 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
 
-    ui->l_folderPath->setStyleSheet("QLabel { background-color : #4374E5; font-size : 20}");
+    ui->l_folderPath->setStyleSheet("QLabel {"
+                                    "color: #FFFFFF;"
+                                    "background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffa02f, stop: 1 #d7801a);"
+                                    "}");
 
     connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), this, SLOT(setDirectory(QModelIndex)));
     connect(ui->tv_fileList, &QTableView::pressed, this, [this] {

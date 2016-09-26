@@ -57,6 +57,7 @@ void SettingsWindow::saveSettings()
         SettingsManager::putSetting("Fonts", "Main font", mainFont);
         SettingsManager::putSetting("Fonts", "List font", listFont);
         SettingsManager::putSetting("Columns", "Hidden columns", hiddenColumns);
+        SettingsManager::putSetting("Styles", "Current style", currStyle);
 
         emit settingsChanged();
         configChanged = false;
@@ -72,6 +73,8 @@ void SettingsWindow::loadSettings()
                (SettingsManager::getSetting("Fonts", "List font", QFont()));
 
     hiddenColumns = SettingsManager::getSetting("Columns", "Hidden columns", QBitArray(FileListModel::Count)).toBitArray();
+    currStyle = SettingsManager::getSetting("Styles", "Current style", ":/styles/Styles/darkorange.qss").toString();
+
     dynamic_cast<FontsPage*> (ui->sw_pages->widget(FontPage))->setMainFont(mainFont);
     dynamic_cast<FontsPage*> (ui->sw_pages->widget(FontPage))->setListFont(listFont);
     dynamic_cast<ColumnsPage*> (ui->sw_pages->widget(ColumnPage))->updateCheckBoxes();

@@ -4,6 +4,7 @@
 #include "filelistmodel.h"
 #include "filelistpanel.h"
 #include "settingswindow.h"
+#include <QApplication>
 #include <QMainWindow>
 #include <QStorageInfo>
 #include <QKeyEvent>

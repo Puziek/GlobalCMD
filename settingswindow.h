@@ -49,6 +49,7 @@ private:
     QFont mainFont;
     QFont listFont;
     QBitArray hiddenColumns;
+    QString currStyle;
 };
 
 #endif // SETTINGSWINDOW_H

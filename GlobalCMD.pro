@@ -42,3 +42,6 @@ FORMS    += globalcmd.ui \
     settingswindow.ui \
     Pages/fontspage.ui \
     Pages/columnspage.ui
+
+RESOURCES += \
+    resources.qrc

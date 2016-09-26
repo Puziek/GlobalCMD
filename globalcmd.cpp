@@ -179,12 +179,18 @@ void GlobalCMD::updateConfig()
                                                             QBitArray(FileListModel::Count)).toBitArray());
     }
 
-    setFont(qvariant_cast<QFont>
-           (SettingsManager::getSetting("Fonts", "Main font", QFont())));
     ui->tw_leftPanel->setFont(qvariant_cast<QFont>
                              (SettingsManager::getSetting("Fonts", "Main font", QFont())));
     ui->tw_rightPanel->setFont(qvariant_cast<QFont>
                               (SettingsManager::getSetting("Fonts", "Main font", QFont())));
+    qApp->setFont(qvariant_cast<QFont>
+                  (SettingsManager::getSetting("Fonts", "Main font", QFont())));
+
+    QFile file(SettingsManager::getSetting("Styles", "Current style", ":/styles/Styles/darkorange.qss").toString());
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qApp->setStyleSheet(file.readAll());
+        file.close();
+    }
 }
 
 void GlobalCMD::updateCurrentTabs(QWidget* firstPanel, QWidget* secondPanel, bool isFirstFocused)
