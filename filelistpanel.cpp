@@ -7,7 +7,7 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     ui(new Ui::FileListPanel)
 {
     ui->setupUi(this);
-    ui->tv_fileList->setFont(qvariant_cast<QFont> (SettingsManager::getSetting("Fonts", "List font", QFont())));
+    ui->tv_fileList->setFont((SettingsManager::getSetting("Fonts", "List font", QFont())).value<QFont>());
 
     if (startingPath == NULL) {
         startingPath = QDir::rootPath();
@@ -20,10 +20,11 @@ FileListPanel::FileListPanel(QString startingPath, QWidget* parent) :
     ui->tv_fileList->setSelectionMode(QAbstractItemView::ContiguousSelection);
     ui->tv_fileList->horizontalHeader()->setSectionResizeMode(FileListModel::Columns::FileName, QHeaderView::Stretch);
 
-    ui->l_folderPath->setStyleSheet("QLabel {"
+    /*ui->l_folderPath->setStyleSheet("QLabel {"
                                     "color: #FFFFFF;"
+                                    "border-radius: 4;"
                                     "background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffa02f, stop: 1 #d7801a);"
-                                    "}");
+                                    "}");*/
 
     connect(ui->tv_fileList, SIGNAL(activated(QModelIndex)), this, SLOT(setDirectory(QModelIndex)));
     connect(ui->tv_fileList, &QTableView::pressed, this, [this] {
@@ -177,6 +178,11 @@ void FileListPanel::setHiddenColumns(const QBitArray &hiddenColumns)
     for (int column = 0; column < FileListModel::Count; ++column) {
         ui->tv_fileList->setColumnHidden(column, hiddenColumns.at(column));
     }
+}
+
+void FileListPanel::createNewTab()
+{
+
 }
 
 QString FileListPanel::getCurrDirName()

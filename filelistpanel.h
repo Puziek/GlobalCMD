@@ -31,6 +31,8 @@ public:
     void setBuddyPanel(FileListPanel* buddy);
     void updateFont(const QFont& font);
     void setHiddenColumns(const QBitArray& hiddenColumns);
+    void createNewTab();
+    void removeCurrentTab();
     QString getCurrDirName();
     QString getCurrDir();
 

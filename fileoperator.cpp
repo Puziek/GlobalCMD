@@ -11,9 +11,8 @@ void FileOperator::startCopyThread(const QFileInfoList& filesToCopy, const QStri
     QtConcurrent::run([](const QFileInfoList& filesToCopy, const QString& destDir){
         for (const QFileInfo& file : filesToCopy) {
             QString dest = destDir;
-            //TODO: Check if there is any way to make it more unified (/ for unix, \ for windows)
-            (dest.endsWith("/")) ? dest += file.fileName() :
-                                   dest = dest + "/" + file.fileName();
+            (dest.endsWith(QDir::separator())) ? dest += file.fileName() :
+                                   dest = dest + QDir::separator() + file.fileName();
             if (QFile(dest).exists()) {
                 QFile::remove(dest);
             }
@@ -41,9 +40,8 @@ void FileOperator::startMoveThread(const QFileInfoList& filesToMove, const QStri
     QtConcurrent::run([](const QFileInfoList& filesToMove, const QString& destDir){
         for (const QFileInfo& file : filesToMove) {
             QString dest = destDir;
-            //TODO: Check if there is any way to make it more unified (/ for unix, \ for windows)
-            (dest.endsWith("/")) ? dest += file.fileName() :
-                                   dest = dest + "/" + file.fileName();
+            (dest.endsWith(QDir::separator())) ? dest += file.fileName() :
+                                   dest = dest + QDir::separator() + file.fileName();
             QFile::rename(file.absoluteFilePath(), dest);
         }
     }, filesToMove, destDir);

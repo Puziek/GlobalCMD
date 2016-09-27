@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     settingsmanager.cpp \
     settingswindow.cpp \
     Pages/fontspage.cpp \
-    Pages/columnspage.cpp
+    Pages/columnspage.cpp \
+    Pages/stylespage.cpp
 
 HEADERS  += globalcmd.h \
     filelistmodel.h \
@@ -35,13 +36,15 @@ HEADERS  += globalcmd.h \
     settingsmanager.h \
     settingswindow.h \
     Pages/fontspage.h \
-    Pages/columnspage.h
+    Pages/columnspage.h \
+    Pages/stylespage.h
 
 FORMS    += globalcmd.ui \
     filelistpanel.ui \
     settingswindow.ui \
     Pages/fontspage.ui \
-    Pages/columnspage.ui
+    Pages/columnspage.ui \
+    Pages/stylespage.ui
 
 RESOURCES += \
     resources.qrc

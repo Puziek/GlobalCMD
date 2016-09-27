@@ -5,6 +5,7 @@
 #include "filelistmodel.h"
 #include "Pages/fontspage.h"
 #include "Pages/columnspage.h"
+#include "Pages/stylespage.h"
 #include <QDialog>
 #include <QListWidgetItem>
 #include <QFontDialog>
@@ -29,6 +30,7 @@ signals:
 
 public slots:
     void updateShowColumnsInfo(const QBitArray& checkBoxes);
+    void updateStylesInfo(const QString& style);
     void showMainFontDialog();
     void showListFontDialog();
 
@@ -37,7 +39,7 @@ private:
     enum Pages {
         FontPage,
         ColumnPage,
-        LangPage,
+        StylePage,
         Count
     };
 

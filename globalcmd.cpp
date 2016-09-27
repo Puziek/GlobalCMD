@@ -67,21 +67,13 @@ GlobalCMD::GlobalCMD(QWidget *parent) :
         settingsWindow->exec();
     });
 
-    connect(ui->pb_copy, &QPushButton::released, this, [this] {
-        focusedPanel->copyFiles();
-    });
+    connect(ui->pb_copy, &QPushButton::released, focusedPanel, &FileListPanel::copyFiles);
 
-    connect(ui->pb_move, &QPushButton::released, this, [this] {
-        focusedPanel->moveFiles();
-    });
+    connect(ui->pb_move, &QPushButton::released, focusedPanel, &FileListPanel::moveFiles);
 
-    connect(ui->pb_makeDir, &QPushButton::released, this, [this] {
-        focusedPanel->createDirectory();
-    });
+    connect(ui->pb_makeDir, &QPushButton::released, focusedPanel, &FileListPanel::createDirectory);
 
-    connect(ui->pb_remove, &QPushButton::released, this, [this] {
-        focusedPanel->removeFiles();
-    });
+    connect(ui->pb_remove, &QPushButton::released, focusedPanel, &FileListPanel::removeFiles);
 
     updateConfig();
 }
@@ -165,31 +157,30 @@ void GlobalCMD::removeCurrentTab()
 void GlobalCMD::updateConfig()
 {
     FileListPanel* panel;
+
+    qApp->setFont(SettingsManager::getSetting("Fonts", "Main font", QFont()).value<QFont>());
+
+    QFile file(SettingsManager::getSetting("Styles", "Current style", "").toString());
+    if (file.exists() && file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qApp->setStyleSheet(file.readAll());
+        file.close();
+    }
+    else {
+        qApp->setStyleSheet(styleSheet());
+    }
+
     for (int widget = 0; widget < ui->tw_leftPanel->count(); ++widget) {
         panel = dynamic_cast<FileListPanel*> (ui->tw_leftPanel->widget(widget));
-        panel->updateFont(qvariant_cast<QFont>(SettingsManager::getSetting("Fonts", "List font", QFont())));
+        panel->updateFont(SettingsManager::getSetting("Fonts", "List font", QFont()).value<QFont>());
         panel->setHiddenColumns(SettingsManager::getSetting("Columns", "Hidden columns",
                                                             QBitArray(FileListModel::Count)).toBitArray());
     }
 
     for (int widget = 0; widget < ui->tw_rightPanel->count(); ++widget) {
         panel = dynamic_cast<FileListPanel*> (ui->tw_rightPanel->widget(widget));
-        panel->updateFont(qvariant_cast<QFont>(SettingsManager::getSetting("Fonts", "List font", QFont())));
+        panel->updateFont(SettingsManager::getSetting("Fonts", "List font", QFont()).value<QFont>());
         panel->setHiddenColumns(SettingsManager::getSetting("Columns", "Hidden columns",
                                                             QBitArray(FileListModel::Count)).toBitArray());
-    }
-
-    ui->tw_leftPanel->setFont(qvariant_cast<QFont>
-                             (SettingsManager::getSetting("Fonts", "Main font", QFont())));
-    ui->tw_rightPanel->setFont(qvariant_cast<QFont>
-                              (SettingsManager::getSetting("Fonts", "Main font", QFont())));
-    qApp->setFont(qvariant_cast<QFont>
-                  (SettingsManager::getSetting("Fonts", "Main font", QFont())));
-
-    QFile file(SettingsManager::getSetting("Styles", "Current style", ":/styles/Styles/darkorange.qss").toString());
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qApp->setStyleSheet(file.readAll());
-        file.close();
     }
 }
 
@@ -201,7 +192,7 @@ void GlobalCMD::updateCurrentTabs(QWidget* firstPanel, QWidget* secondPanel, boo
     firstListPanel->setBuddyPanel(secondListPanel);
     secondListPanel->setBuddyPanel(firstListPanel);
 
-    (isFirstFocused) ? focusedPanel = firstListPanel : focusedPanel = secondListPanel;
+    focusedPanel = isFirstFocused ? firstListPanel : secondListPanel;
 }
 
 void GlobalCMD::connectPanelSignals(FileListPanel* panel, bool isFirstFocused)
