@@ -180,11 +180,6 @@ void FileListPanel::setHiddenColumns(const QBitArray &hiddenColumns)
     }
 }
 
-void FileListPanel::createNewTab()
-{
-
-}
-
 QString FileListPanel::getCurrDirName()
 {
     if (fileListModel->getCurrDirectory().isRoot()) {
@@ -215,5 +210,15 @@ void FileListPanel::setDirectoryPath(const QString &path)
 
 void FileListPanel::setDirectory(const QModelIndex &index)
 {
-    fileListModel->changeDirectory(fileListModel->getFileDir(index));
+    if (fileListModel->isDir(index)) {
+        fileListModel->changeDirectory(fileListModel->getFileDir(index));
+    }
+    else {
+        QString suffix = QFileInfo(fileListModel->getFileDir(index)).suffix();
+        if (suffix == "wmv" || suffix == "mp3") {
+            QProcess* process = new QProcess(this);
+            QString player = "C:/Projects/SimpleButGlobalPlayer/build-MediaPlayer-Desktop_Qt_5_7_0_MinGW_32bit-Release/release/MediaPlayer.exe";
+            process->startDetached(player, QStringList(fileListModel->getFileDir(index)));
+        }
+    }
 }
